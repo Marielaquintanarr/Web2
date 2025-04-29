@@ -73,3 +73,4 @@ Uso de token para endpoints:
 Swagger Documentation:
 
 <img width="1469" alt="Screenshot 2025-04-24 at 10 56 59 p m" src="https://github.com/user-attachments/assets/43da77ff-be24-4efe-a090-ec85a37ab6da" />
+# Web2
