@@ -9,7 +9,7 @@ Para conectarse a la base de datos, copia el path de tu WalletLibrary local y p�
 🔐 OpenAPI Annotations:  
 - Se implementó la documentación con OpenAPI
 
-# **💻 Comando para correr el backend **  
+# **💻 Comando para correr el backend** 
 Para conectarse a la base de datos, copia el path de tu WalletLibrary local y pégalo en la primera línea del archivo application.properties.
 
 ```makefile
