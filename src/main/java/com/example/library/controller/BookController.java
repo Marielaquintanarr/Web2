@@ -16,64 +16,65 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.library.model.Book;
 import com.example.library.repository.BookRepository;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/books")
-@Api(value = "API de Libros", tags = "Libros", description = "Operaciones para gestionar la biblioteca")
+@Tag(name = "Libros", description = "Operaciones para gestionar la biblioteca")
 public class BookController {
 
     @Autowired
     private BookRepository bookRepository;
 
-    @ApiOperation(value = "Obtener todos los libros", notes = "Regresa todos los libros")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Lista de libros obtenida correctamente")
-    })
+    @Operation(summary = "Obtener todos los libros", description = "Regresa todos los libros")
+    @ApiResponse(responseCode = "200", description = "Libros obtenidos correctamente")
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping
     public List<Book> getAllBooks() {
         return bookRepository.findAll();
     }
 
-    @ApiOperation(value = "Obtener un libro por su ID", notes = "Proporciona el ID de un libro para obtener sus detalles")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Libro encontrado"),
-        @ApiResponse(code = 404, message = "Libro no encontrado")
+    @Operation(summary = "Obtener un libro por ID", description = "Busca un libro con su ID")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Libro encontrado"),
+        @ApiResponse(responseCode = "404", description = "Libro no encontrado")
     })
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/{id}")
     public ResponseEntity<Book> getBookById(
-            @ApiParam(value = "ID del libro a consultar", required = true)
+            @Parameter(description = "ID del libro a buscar", required = true)
             @PathVariable Long id) {
         return bookRepository.findById(id)
                 .map(book -> ResponseEntity.ok().body(book))
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @ApiOperation(value = "Crear un libro", notes = "Crea un nuevo libro en la base de datos")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Libro creado correctamente")
-    })
+    @Operation(summary = "Crear un libro", description = "Crea un nuevo libro")
+    @ApiResponse(responseCode = "200", description = "Libro creado")
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping
     public Book createBook(
-            @ApiParam(value = "Objeto libro que se desea registrar", required = true)
+            @Parameter(description = "Objeto libro que se quiere guardar", required = true)
             @RequestBody Book book) {
         return bookRepository.save(book);
     }
 
-    @ApiOperation(value = "Actualizar un libro", notes = "Actualiza los detalles de un libro con su ID")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Libro actualizado correctamente"),
-        @ApiResponse(code = 404, message = "Libro no encontrado")
+    @Operation(summary = "Actualizar un libro", description = "Actualiza la informacion de un libro con su ID")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Libro actualizado"),
+        @ApiResponse(responseCode = "404", description = "Libro no encontrado")
     })
+    @SecurityRequirement(name = "bearerAuth")
     @PutMapping("/{id}")
     public ResponseEntity<Book> updateBook(
-            @ApiParam(value = "ID del libro a actualizar", required = true)
+            @Parameter(description = "ID del libro a actualizar", required = true)
             @PathVariable Long id,
-            @ApiParam(value = "Nuevos datos del libro", required = true)
+            @Parameter(description = "Nuevos datos del libro", required = true)
             @RequestBody Book bookDetails) {
         return bookRepository.findById(id)
                 .map(book -> {
@@ -89,14 +90,15 @@ public class BookController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @ApiOperation(value = "Eliminar un libro", notes = "Elimina un libro de la biblioteca")
-    @ApiResponses(value = {
-        @ApiResponse(code = 204, message = "Libro eliminado correctamente"),
-        @ApiResponse(code = 404, message = "Libro no encontrado")
+    @Operation(summary = "Eliminar un libro", description = "Elimina un libro por su ID")
+    @ApiResponses({
+        @ApiResponse(responseCode = "204", description = "Libro eliminado"),
+        @ApiResponse(responseCode = "404", description = "Libro no encontrado")
     })
+    @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBook(
-            @ApiParam(value = "ID del libro a eliminar", required = true)
+            @Parameter(description = "ID del libro a eliminar", required = true)
             @PathVariable Long id) {
         return bookRepository.findById(id)
                 .map(book -> {
