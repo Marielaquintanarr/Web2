@@ -15,8 +15,7 @@ Para conectarse a la base de datos, copia el path de tu WalletLibrary local y p�
 ```makefile
 mvn spring-boot:run
 ```
-# **📚 Video DEMO **  
-
+# **📚 Video DEMO** 
 https://drive.google.com/file/d/1F5g1syC33rikN_hKUIbOZ3kMa_TqFNEE/view?usp=sharing
 
 
